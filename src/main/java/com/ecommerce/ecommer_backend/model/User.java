@@ -18,6 +18,7 @@ import java.util.Set;
 
 public class User {
 
+
     @Id
     @GeneratedValue ( strategy = GenerationType.IDENTITY)
     private Long id;
@@ -39,9 +40,18 @@ public class User {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    private LocalDateTime updateAt;
+    private LocalDateTime updateAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Order> orders;
 
+    @PrePersist
+    protected void onCreate(){
+        this.createdAt = LocalDateTime.now();
+        this.updateAt = LocalDateTime.now();
+    }
+    @PreUpdate
+    protected void onUpdate(){
+        this.updateAt = LocalDateTime.now();
+    }
 }
